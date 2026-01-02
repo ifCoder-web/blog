@@ -1,0 +1,25 @@
+/* Padrões BRLTech */
+
+/* Color */
+.brl-color-1 {
+    color: #066699 !important;
+}
+
+i {
+    color: #066699;
+}
+
+/* Center box */
+.brl-center-box {
+    margin: 0;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* BG */
+.brl-bg-gradient {
+    background: #02416D;
+    background: linear-gradient(120deg,rgba(2, 65, 109, 1) 0%, rgba(6, 102, 153, 1) 100%);
+}
