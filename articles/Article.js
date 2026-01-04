@@ -10,7 +10,7 @@ const articles_schema = new Schema({
         type: String,
         required: true
     },
-        category: {
+    category: {
         type: mongoose.ObjectId,
         ref: "Categories",
         required: true
@@ -32,6 +32,10 @@ const articles_schema = new Schema({
         default: new Date()
     },
     createdAtFormat: {
+        type: String,
+        required: true
+    },
+    updatedAtFormat: {
         type: String,
         required: true
     }

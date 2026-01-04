@@ -63,6 +63,10 @@ router.get("/", (req, res) => {
             .then(data => {
                 res.send(data);
             })
+            .catch(err => {
+                console.error("Erro ao consultar categorias: "+err);
+                res.redirect("/");
+            })
     })
 
 /////////// POST ///////////
@@ -109,16 +113,30 @@ router.post("/admin/edit", async (req, res) => {
 // Delete
 router.post("/admin/delete", async (req, res) => {
     const id = req.body.id;
-
-    categorieModel.findOneAndDelete(id)
-        .then(() => {
-            console.log("catedoria deletada com sucesso!");
-            res.redirect(req.get("Referrer" || "/"));
+    
+    categorieModel.findById(id)
+        .then(data => {
+            // Validação
+            if(data.articles.length > 0){
+                console.log("Erro ao deletar categoria: Existem artigos relacionados");
+                res.redirect("/");
+            }else{
+                categorieModel.findOneAndDelete(id)
+                    .then(() => {
+                        console.log("categoria deletada com sucesso!");
+                        res.redirect(req.get("Referrer" || "/"));
+                    })
+                    .catch(err => {
+                        console.log("Erro ao deletar categoria: "+err);
+                        res.redirect("/");
+                    })
+            }
         })
         .catch(err => {
             console.log("Erro ao deletar categoria: "+err);
             res.redirect("/");
         })
+    
 })
 
 module.exports = router;

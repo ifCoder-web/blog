@@ -2,8 +2,8 @@
 
 <div class="container">
   <hr>
-  <h2>Categorias</h2>
-  <a class="btn btn-success" href="/categories/admin/new">Adicionar nova</a>
+  <h2>Artigos</h2>
+  <a class="btn btn-success" href="/articles/admin/new">Adicionar novo</a>
   <hr>
   <table class="table table-bordered mt-4">
     <thead>
@@ -11,23 +11,22 @@
         <th>Id</th>
         <th>Título</th>
         <th>Slug</th>
-        <th>Artigos</th>
         <th>Ações</th>
       </tr>
     </thead>
     <tbody>
-      <% categories.forEach(categorie => { %>
+      <% articles.forEach(article => { %>
         <tr>
-          <td><%= categorie._id %></td>
-          <td><%= categorie.title %></td>
-          <td><%= categorie.slug %></td>
-          <td><%= categorie.articles.length %></td>
+          <td><%= article._id %></td>
+          <td><%= article.title %></td>
+          <td><%= article.slug %></td>
           <td>
             <!-- Edit -->
-            <a href="/categories/admin/edit/<%= categorie._id %>" type="submit" class="btn btn-secondary">Editar</a>       
+            <a href="/articles/admin/update/<%= article._id %>" type="submit" class="btn btn-secondary">Editar</a>       
             <!-- Delete -->
-            <form action="/categories/admin/delete" method="POST" style="display: inline;" onsubmit="preventExclud(event, this)">
-              <input type="hidden" name="id" value="<%= categorie._id %>">
+            <form action="/articles/admin/delete" method="POST" style="display: inline;" onsubmit="preventExclud(event, this)">
+              <input type="hidden" name="id" value="<%= article._id %>">
+              <input type="hidden" name="categoryId" value="<%= article.category._id %>">
               <button class="btn btn-danger">Deletar</button>
             </form>
           </td>
