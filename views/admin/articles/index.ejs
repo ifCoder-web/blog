@@ -1,4 +1,5 @@
 <%- include('../../partials/header'); %>
+<%- include('../../partials/navbar'); %>
 
 <div class="container">
   <hr>
@@ -11,6 +12,7 @@
         <th>Id</th>
         <th>Título</th>
         <th>Slug</th>
+        <th>Categoria</th>
         <th>Ações</th>
       </tr>
     </thead>
@@ -20,6 +22,7 @@
           <td><%= article._id %></td>
           <td><%= article.title %></td>
           <td><%= article.slug %></td>
+          <td><%= article.category.title %></td>
           <td>
             <!-- Edit -->
             <a href="/articles/admin/update/<%= article._id %>" type="submit" class="btn btn-secondary">Editar</a>       

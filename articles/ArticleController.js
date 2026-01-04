@@ -28,7 +28,7 @@ router.get("/", (req, res) => {
     // Read
     router.get("/admin", (req, res) => {
         // Consulta de artigos
-        articlesModel.find()
+        articlesModel.find().populate("category").sort({_id: -1})
             .then(data => {
                 res.render("admin/articles/index", {
                     articles: data
@@ -99,16 +99,21 @@ function creatNewDate(){
 router.post("/admin/new", (req, res) => {
     // data
     const title = req.body.title;
+    const subTitle = req.body.subTitle;
     const slug = slugify(title, {lower: true});
     const category = req.body.category;
     const body = req.body.body;
     const img = req.body.img;
+    const alt = req.body.alt;
     const abstract = req.body.abstract;
 
     var errors = [];
 
     if(title == "" || title == undefined || title == null){
-        errors.push("Insira o tiltulo do artigo.");
+        errors.push("Insira o titulo do artigo.");
+    }
+    if(subTitle == "" || subTitle == undefined || subTitle == null){
+        errors.push("Insira o Sub titulo do artigo.");
     }
     if(slug == "" || slug == undefined || slug == null){
         errors.push("Impossível criar slug do artigo.");
@@ -120,7 +125,10 @@ router.post("/admin/new", (req, res) => {
         errors.push("Insira o corpo do artigo.");
     }
     if(img == "" || img == undefined || img == null){
-        errors.push("Insira aa imagem destaque do artigo.");
+        errors.push("Insira a imagem destaque do artigo.");
+    }
+    if(alt == "" || alt == undefined || alt == null){
+        errors.push("Insira o texto Alt da imagem destaque.");
     }
     if(abstract == "" || abstract == undefined || abstract == null){
         errors.push("Insira o resumo do artigo.");
@@ -136,10 +144,12 @@ router.post("/admin/new", (req, res) => {
         // Salvando no DB
         new articlesModel({
             title: title,
+            subTitle: subTitle,
             slug: slug,
             category: category,
             body: body,
             img: img,
+            alt: alt,
             abstract: abstract,
             createdAtFormat: creatNewDate(),
             updatedAtFormat: creatNewDate()
@@ -169,10 +179,12 @@ router.post("/admin/update", async (req, res) => {
     // data
     const id = req.body.id;
     const title = req.body.title;
+    const subTitle = req.body.subTitle;
     const slug = slugify(title, {lower: true});
     const category = req.body.category;
     const body = req.body.body;
     const img = req.body.img;
+    const alt = req.body.alt;
     const abstract = req.body.abstract;
     const oldCategory = req.body.oldCategory;
 
@@ -202,10 +214,12 @@ router.post("/admin/update", async (req, res) => {
     // Atualizando dados
     articlesModel.updateOne({ _id: id }, {
         title: title,
+        subTitle: subTitle,
         slug: slug,
         category: category,
         body: body,
         img: img,
+        alt: alt,
         abstract: abstract,
         updatedAtFormat: creatNewDate()
     })
@@ -228,7 +242,7 @@ router.post("/admin/delete", (req, res) => {
         // Deletando artigo
         articlesModel.deleteOne({ _id: id })
             .then(data => {
-                categoriesModel.updateOne({ _id: categoryId }, {
+                categoriesModel.updateOne({ _id: categoryId }, { // Deletando categoria
                     $pull: {articles: id}
                 })
                 .then(() => {

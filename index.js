@@ -33,7 +33,63 @@ const port = process.env.PORT || 8081
   // });
 
 app.get('/', (req, res) => {
-  res.render("index")
+  Articles.find().sort({_id: -1})
+    .then(articles => {
+      Categories.find().sort({articles: 1})
+        .then(categories => {
+          res.render("index", {
+            articles: articles,
+            categories: categories
+          })
+        })
+        .catch(err => {
+          console.error("Erro ao carregar categorias");
+          res.redirect("/404");
+        })
+    })
+    .catch(err => {
+      console.error("Erro ao carregar artigos");
+      res.redirect("/404");
+    })
+})
+
+// Exibição de artigo
+app.get("/:slug", (req, res) => {
+  const slug = req.params.slug;
+
+  // Pesquisa no DB
+  Articles.findOne({slug: slug}).populate("category")
+    .then(article => {
+      if(article == null){
+        console.error("Artigo não encontrado");
+        res.redirect("/");
+      }else{
+        Categories.findById(article.category._id).populate("articles")
+          .then(category => {
+            // Todas as categorias
+            Categories.find().sort({articles: 1})
+              .then(categories => {
+                res.render("article", {
+                  article: article,
+                  category: category,
+                  categories: categories
+                })
+              })
+              .catch(err => {
+                console.error("Erro ao consultar categorias");
+                res.redirect("/");
+              })
+          })
+          .catch(err => {
+            console.error("Erro ao consultar categoria");
+            res.redirect("/");
+          })
+      }
+    })
+    .catch(err => {
+      console.error("Erro ao consultar artigo");
+      res.redirect("/");
+    })
 })
 
 // Categories
