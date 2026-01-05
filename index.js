@@ -53,8 +53,13 @@ app.get('/', (req, res) => {
     })
 })
 
+// Blog
+app.get("/blog", (req, res) => {
+  res.redirect("/")
+})
+
 // Exibição de artigo
-app.get("/:slug", (req, res) => {
+app.get("/blog/:slug", (req, res) => {
   const slug = req.params.slug;
 
   // Pesquisa no DB
@@ -92,11 +97,32 @@ app.get("/:slug", (req, res) => {
     })
 })
 
-// Categories
-app.use("/categories", categoriesController);
+// Categorias
+app.get("/categoria/:slug", (req, res) => {
+  const slug = req.params.slug
 
-// Articles
-app.use("/articles", articlesController);
+  Categories.findOne({ slug: slug }).populate("articles").sort({_id: -1})
+    .then(category => {
+      res.render("categories", {
+        category: category
+      })
+    })
+    .catch(err => {
+      console.error("Erro ao consultar categoria");
+      res.redirect("/");
+    })
+})
+
+app.get("/categoria", (req, res) => {
+  res.redirect("/");
+})
+
+// ADMIN
+  // Categories
+  app.use("/categories", categoriesController);
+
+  // Articles
+  app.use("/articles", articlesController);
 
 app.listen(port, () => {
   console.log(`No ar! Porta: ${port}`)

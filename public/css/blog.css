@@ -23,3 +23,11 @@ i {
     background: #02416D;
     background: linear-gradient(120deg,rgba(2, 65, 109, 1) 0%, rgba(6, 102, 153, 1) 100%);
 }
+
+/* DISPLAY GRID - CATEGORIAS*/
+.brl-grid-pai {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, auto));
+    gap: 20px;
+    justify-content: start
+}

@@ -6,6 +6,10 @@ const articles_schema = new Schema({
         type: String,
         require: true
     },
+    subTitle: {
+        type: String,
+        require: true
+    },
     slug: {
         type: String,
         required: true
@@ -18,6 +22,10 @@ const articles_schema = new Schema({
     img: {
         type: String,
         required: true
+    },
+    alt: {
+        type: String,
+        require: true
     },
     abstract: {
         type: String,

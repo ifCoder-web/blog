@@ -78,7 +78,7 @@ router.post("/admin/new", async (req, res) => {
 
     await new categorieModel({
         title: title,
-        slug: slugify(title)
+        slug: slugify(title, {lower: true})
     }).save()
     .then(() => {
         console.log("Categoria salva no DB");
@@ -98,7 +98,7 @@ router.post("/admin/edit", async (req, res) => {
 
     await categorieModel.findByIdAndUpdate(id, {
         title: title,
-        slug: slugify(title)
+        slug: slugify(title, {lower: true})
     })
     .then(() => {
         console.log("Categoria editada com sucesso!");

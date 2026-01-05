@@ -1,0 +1,28 @@
+<%- include('partials/header'); %>
+<%- include('partials/navbar'); %>
+
+<!-- Banner -->
+<header class="banner bg-body-tertiary">
+    <div class="container pt-5 pb-5 text-center">
+        <h1 class="mb-2">Tudo sobre <%= category.title %></h1>
+        <h2 class="fs-5">Navegue pelas conteudos e dicas mas comentados sobre <%= category.title %></h2>
+    </div>
+</header>
+
+<!-- Content -->
+<div class="container mt-5 mb-5">
+        <main class="brl-grid-pai" style="width: 100%;">
+            <% category.articles.forEach(article => { %>
+                <div class="card mb-4" style="overflow: hidden;">
+                    <img src="<%= article.img %>" class="card-img-top img-fluid" alt="<%= article.alt %>" style="height: 250px; object-fit: cover;">
+                    <div class="card-body">
+                        <h5 class="card-title"><%= article.title %></h5>
+                        <p class="card-text"><%= article.abstract %></p>
+                        <a href="/blog/<%= article.slug %>" class="btn btn-primary stretched-link">Ler mais</a>
+                    </div>
+                </div>
+            <% }) %>
+        </main>
+</div>
+
+<%- include('partials/footer'); %>

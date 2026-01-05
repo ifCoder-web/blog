@@ -6,7 +6,7 @@
     <div class="container-fluid pt-5 pb-4 text-center">
         <h1 class="mb-2"><%= article.title %></h1>
         <span>. . .</span>
-        <h2 class="fs-5">Adicionar subtitulo!</h2>
+        <h2 class="fs-5"><%= article.subTitle %></h2>
     </div>
     <hr>
 </header>
@@ -18,8 +18,8 @@
         <main class="col col-12 col-md-8">
             <!-- Imagem principal -->
              <figure class="figure" style="width: 100%;">
-                <img src="<%= article.img %>" class="figure-img img-fluid rounded" alt="..." style="width: 100%;">
-                <figcaption class="figure-caption">Adicionar descrição da imagem.</figcaption>
+                <img src="<%= article.img %>" class="figure-img img-fluid rounded" alt="<%= article.alt %>" style="width: 100%;">
+                <figcaption class="figure-caption"><%= article.alt %></figcaption>
             </figure>
             <!-- Tópicos -->
             <div class="card mt-3 mb-3">
@@ -46,7 +46,7 @@
                 <div class="card-body">
                     <div class="list-group">
                         <% category.articles.forEach(article => { %>
-                            <a href="/<%= article.slug %>" class="list-group-item list-group-item-action">
+                            <a href="/blog/<%= article.slug %>" class="list-group-item list-group-item-action">
                                 <div class="d-flex w-100 justify-content-between">
                                     <h5 class="mb-1"><%= article.title %></h5>
                                 </div>
@@ -64,17 +64,15 @@
                 </div>
                 <div class="card-body">
                     <ul class="list-group">
-                        <% categories.forEach(categori => { %>
+                        <% categories.forEach(category => { %>
                             <li class="list-group-item">
-                                <a href="#" class="link-primary link-underline-opacity-25 link-underline-opacity-100-hover stretched-link"><%= categori.title %><span class="badge text-bg-secondary ms-2"><%= categori.articles.length %></span></a>
+                                <a href="/categoria/<%=category.slug %> " class="link-primary link-underline-opacity-25 link-underline-opacity-100-hover stretched-link"><%= category.title %><span class="badge text-bg-secondary ms-2"><%= category.articles.length %></span></a>
                             </li>
                         <% }) %>
                     </ul>
                 </div>
             </div>
-            
         </nav>
-
     </div>
 </div>
 
