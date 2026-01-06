@@ -8,10 +8,12 @@ const port = process.env.PORT || 8081
   // Rotas
   const categoriesController = require("./categories/CategoryController");
   const articlesController = require("./articles/ArticleController");
+  const usersController = require("./users/UsersController");
 
   // DB
   const Articles = require("./articles/Article");
   const Categories = require("./categories/Category");
+  const Users = require("./users/User");
 
 // Configs
   // View Engine
@@ -123,6 +125,9 @@ app.get("/categoria", (req, res) => {
 
   // Articles
   app.use("/articles", articlesController);
+
+  // Users
+  app.use("/users", usersController);
 
 app.listen(port, () => {
   console.log(`No ar! Porta: ${port}`)
