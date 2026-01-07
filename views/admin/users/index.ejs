@@ -1,5 +1,5 @@
 <%- include('../../partials/header'); %>
-<%- include('../../partials/navbar'); %>
+<%- include('../../partials/navbarAdmin'); %>
 
 <div class="container">
   <hr>
@@ -9,16 +9,18 @@
   <table class="table table-bordered mt-4">
     <thead>
       <tr>
-        <th>Id</th>
+        <th>Nick</th>
         <th>Email</th>
+        <th>Id</th>
         <th>Ações</th>
       </tr>
     </thead>
     <tbody>
       <% users.forEach(user => { %>
         <tr>
-          <td><%= user._id %></td>
+          <td><%= user.nick %></td>
           <td><%= user.email %></td>
+          <td><%= user._id %></td>
           <td>
             <!-- Delete -->
             <form action="/users/admin/delete" method="POST" style="display: inline;" onsubmit="preventExclud(event, this)">

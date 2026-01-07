@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const slugify = require("slugify");
+const adminAuth = require("../middlewares/adminAuth");
 const categoriesModel = require("../categories/Category");
 const articlesModel = require("./Article");
 
@@ -10,7 +11,7 @@ router.get("/", (req, res) => {
 
 // ADMIN
     // Create
-    router.get("/admin/new", async (req, res) => {
+    router.get("/admin/new", adminAuth, async (req, res) => {
         // Consutando dados de categorias
         
         await categoriesModel.find()
@@ -26,7 +27,7 @@ router.get("/", (req, res) => {
     })
 
     // Read
-    router.get("/admin", (req, res) => {
+    router.get("/admin", adminAuth, (req, res) => {
         // Consulta de artigos
         articlesModel.find().populate("category").sort({_id: -1})
             .then(data => {
@@ -41,7 +42,7 @@ router.get("/", (req, res) => {
     })
 
     // Update
-    router.get("/admin/update/:id", (req, res) => {
+    router.get("/admin/update/:id", adminAuth, (req, res) => {
         id = req.params.id;
 
         articlesModel.findById(id).populate("category")
@@ -65,7 +66,7 @@ router.get("/", (req, res) => {
     });
 
     // DB
-    router.get("/admin/db", (req, res) => {
+    router.get("/admin/db", adminAuth, (req, res) => {
         // Consulta artigos
         articlesModel.find().sort({_id: -1}).populate("category")
             .then(data => {
@@ -96,7 +97,7 @@ function creatNewDate(){
 }
 
 // Create
-router.post("/admin/new", (req, res) => {
+router.post("/admin/new", adminAuth, (req, res) => {
     // data
     const title = req.body.title;
     const subTitle = req.body.subTitle;
@@ -175,7 +176,7 @@ router.post("/admin/new", (req, res) => {
 });
 
 // Update
-router.post("/admin/update", async (req, res) => {
+router.post("/admin/update", adminAuth, async (req, res) => {
     // data
     const id = req.body.id;
     const title = req.body.title;
@@ -234,7 +235,7 @@ router.post("/admin/update", async (req, res) => {
 });
 
 // Delete
-router.post("/admin/delete", (req, res) => {
+router.post("/admin/delete", adminAuth, (req, res) => {
     const id = req.body.id;
     const categoryId = req.body.categoryId;
     // Validação

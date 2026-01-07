@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const slugify = require("slugify");
+const adminAuth = require("../middlewares/adminAuth");
 const categorieModel = require("./Category");
 
 
@@ -10,12 +11,12 @@ router.get("/", (req, res) => {
 
 // ADM
     // Create
-    router.get("/admin/new", (req, res) => {
+    router.get("/admin/new", adminAuth, (req, res) => {
         res.render("admin/categories/new");
     })
 
     // Read
-    router.get("/admin", (req, res) => {
+    router.get("/admin", adminAuth, (req, res) => {
         // Pesquisa no DB
         categorieModel.find()
             .then(data => {
@@ -30,7 +31,7 @@ router.get("/", (req, res) => {
     })
 
     // Update
-    router.get("/admin/edit/:id", (req, res) => {
+    router.get("/admin/edit/:id", adminAuth, (req, res) => {
         const id = req.params.id;
 
         // Consulta DB
@@ -57,7 +58,7 @@ router.get("/", (req, res) => {
     })
 
     // DB
-    router.get("/admin/db", (req, res) => {
+    router.get("/admin/db", adminAuth, (req, res) => {
         // Lendo dados do DB Categories
         categorieModel.find().sort({_id: -1})
             .then(data => {
@@ -72,7 +73,7 @@ router.get("/", (req, res) => {
 /////////// POST ///////////
 
 // Create
-router.post("/admin/new", async (req, res) => {
+router.post("/admin/new", adminAuth, async (req, res) => {
     // Recebendo dados do form
     const title = req.body.title;
 
@@ -91,7 +92,7 @@ router.post("/admin/new", async (req, res) => {
 })
 
 // Update
-router.post("/admin/edit", async (req, res) => {
+router.post("/admin/edit", adminAuth, async (req, res) => {
     // Dados do formulario
     const id = req.body.id;
     const title = req.body.title;
@@ -111,7 +112,7 @@ router.post("/admin/edit", async (req, res) => {
 })
 
 // Delete
-router.post("/admin/delete", async (req, res) => {
+router.post("/admin/delete", adminAuth, async (req, res) => {
     const id = req.body.id;
     
     categorieModel.findById(id)

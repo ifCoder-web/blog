@@ -3,6 +3,10 @@ const { Schema } = mongoose;
 const db = require("../db/db");
 
 const User = new Schema ({
+  nick: {
+    type: String,
+    require: true
+  },
   email: {
     type: String,
     require: true

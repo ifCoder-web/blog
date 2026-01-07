@@ -2,6 +2,7 @@ const express = require('express')
 const app = express()
 require('dotenv').config()
 const bodyParser = require("body-parser");
+const session = require("express-session");
 const port = process.env.PORT || 8081
 
 // Import
@@ -18,6 +19,16 @@ const port = process.env.PORT || 8081
 // Configs
   // View Engine
   app.set('view engine', 'ejs');
+
+  // Sessions
+  app.use(session({
+    secret: process.env.SESSION_SECRET,
+    cookies: {
+      maxAge: 3600000 // 12h
+    },
+    resave: false,
+    saveUninitialized: false
+  }))
 
   // Static
   app.use(express.static('public'));
