@@ -1,19 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const adminAuth = require("../middlewares/adminAuth");
-const bcrypt = require("bcryptjs");
 const User = require("./User");
-
-// Login
-router.get("/login", (req, res) => {
-    res.render("./admin/users/login");
-})
-
-// Logout
-router.get("/logout", (req, res) => {
-    req.session.user = undefined;
-    res.redirect("/");
-})
 
 // Create
 router.get("/admin/new", adminAuth, (req, res) => {
@@ -42,37 +30,6 @@ router.get("/admin/db", adminAuth, (req, res) => {
 })
 
 ////////// POST //////////
-
-// authenticate 
-router.post("/authenticate", (req, res) => {
-    const email = req.body.email;
-    const pass = req.body.pass;
-
-    // Consulta DB
-    User.findOne({ email: email })
-        .then(user => {
-            if(user != undefined && user != null && user != ""){ // Existe o usuário
-                // Validar senha
-                var correct = bcrypt.compareSync(pass, user.pass);
-                if(correct){ // Senha correta
-                    req.session.user = {
-                        id: user._id,
-                        email: user.email
-                    }
-                    res.redirect("/");
-                }else{
-                    res.redirect("/users/login");
-                }
-            }else{
-                res.redirect("/users/login");
-            }
-        })
-        .catch(error => {
-            console.error("Erro ao consultar user: "+error);
-            res.redirect("/");
-        })
-})
-
 // Create
 router.post("/admin/new", adminAuth, (req, res) => {
     const nick = req.body.nick;

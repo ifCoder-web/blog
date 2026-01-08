@@ -3,6 +3,7 @@ const app = express()
 require('dotenv').config()
 const bodyParser = require("body-parser");
 const session = require("express-session");
+const bcrypt = require("bcryptjs");
 const port = process.env.PORT || 8081
 
 // Import
@@ -14,7 +15,7 @@ const port = process.env.PORT || 8081
   // DB
   const Articles = require("./articles/Article");
   const Categories = require("./categories/Category");
-  const Users = require("./users/User");
+  const User = require("./users/User");
 
 // Configs
   // View Engine
@@ -29,6 +30,12 @@ const port = process.env.PORT || 8081
     resave: false,
     saveUninitialized: false
   }))
+
+  // Valid Session
+  app.use((req, res, next) => {
+    res.locals.user = req.session.user || null;
+    next()
+  })
 
   // Static
   app.use(express.static('public'));
@@ -66,6 +73,50 @@ app.get('/', (req, res) => {
     })
 })
 
+/////////// SESSION ////////////
+// Login
+app.get("/login", (req, res) => {
+    res.render("./admin/users/login");
+})
+
+// Logout
+app.get("/logout", (req, res) => {
+    req.session.user = undefined;
+    res.redirect("/");
+})
+
+// authenticate 
+app.post("/authenticate", (req, res) => {
+    const email = req.body.email;
+    const pass = req.body.pass;
+
+    // Consulta DB
+    User.findOne({ email: email })
+        .then(user => {
+            if(user != undefined && user != null && user != ""){ // Existe o usuário
+                // Validar senha
+                var correct = bcrypt.compareSync(pass, user.pass);
+                if(correct){ // Senha correta
+                    req.session.user = {
+                        id: user._id,
+                        email: user.email
+                    }
+                    res.redirect("/");
+                }else{
+                    res.redirect("/login");
+                }
+            }else{
+                res.redirect("/login");
+            }
+        })
+        .catch(error => {
+            console.error("Erro ao consultar user: "+error);
+            res.redirect("/");
+        })
+})
+
+
+///////////// APP /////////////
 // Blog
 app.get("/blog", (req, res) => {
   res.redirect("/")

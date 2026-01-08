@@ -6,7 +6,7 @@ const categoriesModel = require("../categories/Category");
 const articlesModel = require("./Article");
 
 router.get("/", (req, res) => {
-    res.send("Home - Articles");
+    res.redirect("/");
 })
 
 // ADMIN
@@ -17,7 +17,7 @@ router.get("/", (req, res) => {
         await categoriesModel.find()
             .then(data => {
                 res.render("admin/articles/new", {
-                    categories: data
+                    categories: data,
                 });
             })
             .catch(err => {
@@ -32,7 +32,7 @@ router.get("/", (req, res) => {
         articlesModel.find().populate("category").sort({_id: -1})
             .then(data => {
                 res.render("admin/articles/index", {
-                    articles: data
+                    articles: data,
                 })
             })
             .catch(err => {
@@ -51,7 +51,7 @@ router.get("/", (req, res) => {
                     .then(categories => {
                         res.render("./admin/articles/edit", {
                             article: article.toJSON(),
-                            categories:  categories.map(categories => categories.toJSON())
+                            categories:  categories.map(categories => categories.toJSON()),
                         })
                     })
                     .catch(error => {
