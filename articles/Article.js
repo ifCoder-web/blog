@@ -2,6 +2,11 @@ const mongoose = require("mongoose");
 const { Schema } = mongoose;
 
 const articles_schema = new Schema({
+    author: {
+        type: mongoose.ObjectId,
+        ref: "User",
+        require: true
+    },
     title: {
         type: String,
         require: true

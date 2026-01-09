@@ -53,7 +53,7 @@ const port = process.env.PORT || 8081
   // });
 
 app.get('/', (req, res) => {
-  Articles.find().sort({_id: -1})
+  Articles.find().sort({_id: -1}).populate("author")
     .then(articles => {
       Categories.find().sort({articles: 1})
         .then(categories => {
@@ -99,7 +99,8 @@ app.post("/authenticate", (req, res) => {
                 if(correct){ // Senha correta
                     req.session.user = {
                         id: user._id,
-                        email: user.email
+                        email: user.email,
+                        nick: user.nick
                     }
                     res.redirect("/");
                 }else{
@@ -127,7 +128,7 @@ app.get("/blog/:slug", (req, res) => {
   const slug = req.params.slug;
 
   // Pesquisa no DB
-  Articles.findOne({slug: slug}).populate("category")
+  Articles.findOne({slug: slug}).populate("category").populate("author")
     .then(article => {
       if(article == null){
         console.error("Artigo não encontrado");

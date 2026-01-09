@@ -56,6 +56,13 @@
                         <textarea name="abstract" class="form-control" cols="20" rows="3" placeholder="Resumo focado em SEO"></textarea>
                     </div>
                 </div>
+
+                <div class="row mb-3">
+                    <div class="col">
+                        <span>Autor: <%= user.nick %></span>
+                        <input type="text" name="author" class="form-control" value="<%= user.id %>" hidden>
+                    </div>
+                </div>
                 <button class="btn btn-success mt-2" type="submit">Enviar</button>
             </form>
         </div>

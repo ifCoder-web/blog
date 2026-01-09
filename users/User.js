@@ -1,6 +1,5 @@
 const mongoose = require("mongoose");
 const { Schema } = mongoose;
-const db = require("../db/db");
 
 const User = new Schema ({
   nick: {
@@ -15,6 +14,11 @@ const User = new Schema ({
     type: String,
     require: true
   },
+  articles: [{
+    type: mongoose.ObjectId,
+    ref: "Article",
+    require: true
+  }],
   createdAt: {
     type: Date,
     required: true,

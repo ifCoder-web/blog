@@ -27,7 +27,7 @@ i {
 /* DISPLAY GRID - CATEGORIAS*/
 .brl-grid-pai {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, auto));
+    grid-template-columns: repeat(auto-fit, minmax(300px, auto));
     gap: 20px;
     justify-content: start
 }

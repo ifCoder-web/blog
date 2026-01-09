@@ -4,6 +4,7 @@ const slugify = require("slugify");
 const adminAuth = require("../middlewares/adminAuth");
 const categoriesModel = require("../categories/Category");
 const articlesModel = require("./Article");
+const User = require("../users/User");
 
 router.get("/", (req, res) => {
     res.redirect("/");
@@ -13,7 +14,6 @@ router.get("/", (req, res) => {
     // Create
     router.get("/admin/new", adminAuth, async (req, res) => {
         // Consutando dados de categorias
-        
         await categoriesModel.find()
             .then(data => {
                 res.render("admin/articles/new", {
@@ -89,7 +89,7 @@ function creatNewDate(){
         else
             return numero; 
     }
-    const meses = ["Janneiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"];
+    const meses = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"];
     let dataAtual = new Date();
     let dataAtualFormatada = (adicionaZero(dataAtual.getDate().toString()) + " de " + meses[(dataAtual.getMonth())] + " de " + dataAtual.getFullYear());
 
@@ -107,6 +107,7 @@ router.post("/admin/new", adminAuth, (req, res) => {
     const img = req.body.img;
     const alt = req.body.alt;
     const abstract = req.body.abstract;
+    const author = req.body.author;
 
     var errors = [];
 
@@ -134,6 +135,9 @@ router.post("/admin/new", adminAuth, (req, res) => {
     if(abstract == "" || abstract == undefined || abstract == null){
         errors.push("Insira o resumo do artigo.");
     }
+    if(author == "" || author == undefined || author == null){
+        errors.push("Insira o nome do autor.");
+    }
 
     if(errors.length > 0){
         console.log("Erro ao salvar artigo!");
@@ -152,14 +156,18 @@ router.post("/admin/new", adminAuth, (req, res) => {
             img: img,
             alt: alt,
             abstract: abstract,
+            author: author,
             createdAtFormat: creatNewDate(),
             updatedAtFormat: creatNewDate()
         }).save()
-            .then(data => {
+            .then(data1 => {
                 categoriesModel.updateOne({ _id: category }, {
-                    $push: {articles: data._id}
+                    $push: {articles: data1._id}
                 })
-                .then(data => {
+                .then(data2 => {
+                    UserActivation.updateOne({ _id: author }, {
+                        $push: {articles: data1._id}
+                    })
                     console.log("Artigo salvo no DB!");
                     res.redirect("/articles/admin");
                 })
@@ -188,6 +196,7 @@ router.post("/admin/update", adminAuth, async (req, res) => {
     const alt = req.body.alt;
     const abstract = req.body.abstract;
     const oldCategory = req.body.oldCategory;
+    const author = req.body.author;
 
     // Deletando artigo da categoria
     categoriesModel.updateOne({ _id: oldCategory }, {
@@ -222,7 +231,8 @@ router.post("/admin/update", adminAuth, async (req, res) => {
         img: img,
         alt: alt,
         abstract: abstract,
-        updatedAtFormat: creatNewDate()
+        updatedAtFormat: creatNewDate(),
+        author: author
     })
     .then(data => {
         console.log("Artigo atualizado!");
